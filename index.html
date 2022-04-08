@@ -11,12 +11,23 @@ window.addEventListener("message", function(event){
 window.onload = function() {
 	var key = "sender_message=";
 	var last_cookie = "";
+	
+	//string.startsWith doesn't exist in IE
+	if (!String.prototype.startsWith) {
+	    Object.defineProperty(String.prototype, 'startsWith', {
+		value: function(search, rawPos) {
+		    var pos = rawPos > 0 ? rawPos|0 : 0;
+		    return this.substring(pos, pos + search.length) === search;
+		}
+	    });
+	}
+	
 	var intervalId = window.setInterval(function(){
 		var cookies = document.cookie.split(';');
 		//Using for loop since forEach doesn't compile in IE
 		for(var i = 0; i < cookies.length; i++) {
 			//trimStart because depending on Cookie position in array it may contain a space at the start
-			if(cookies[i].trimStart().startsWith(key)) {
+			if(cookies[i].startsWith(key)) {
 				var new_cookie = cookies[i].replace(key,"");
 				if(last_cookie !== new_cookie) {
 					last_cookie = new_cookie;
