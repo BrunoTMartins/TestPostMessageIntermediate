@@ -18,6 +18,11 @@ window.addEventListener('storage', function onStorageEvent(storageEvent) {
 		window.parent.postMessage(storageEvent.newValue, "*"); //works in PEGA
 	}
 }, false);
+
+function readCookies() {
+	alert(document.getElementById("frame2").contentDocument.cookie);
+}
 </script>
 
 <p>Iframe</p>
+<input type="button" value="Read cookies" onclick="readCookies()">
