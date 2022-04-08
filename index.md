@@ -1,0 +1,23 @@
+<script>
+window.addEventListener("message", function(event){
+	console.log(event.data);
+	//localStorage.setItem('myData', event.data);
+	sessionStorage.setItem('myData', event.data);
+	//window.dispatchEvent(new Event('storage'));
+	document.cookie = 'cookie1=test; SameSite=None; Secure; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/'
+});
+
+
+window.addEventListener('storage', function onStorageEvent(storageEvent) {
+	console.log('storage event');
+	console.log(JSON.stringify(localStorage));
+	var win = window.parent[0];
+	
+	if(win && win.name === 'frame2') {
+		top.postMessage(storageEvent.newValue, "*"); //Works locally
+		window.parent.postMessage(storageEvent.newValue, "*"); //works in PEGA
+	}
+}, false);
+</script>
+
+<p>Iframe</p>
