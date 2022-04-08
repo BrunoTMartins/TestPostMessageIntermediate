@@ -1,38 +1,31 @@
 <script>
+//Receives data from Sender and saves it in a Cookie
 window.addEventListener("message", function(event){
-	console.log(event.data);
-	//localStorage.setItem('myData', event.data);
-	sessionStorage.setItem('myData', event.data);
-	//window.dispatchEvent(new Event('storage'));
-	document.cookie = 'cookie1=test; SameSite=None; Secure; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/'
+	console.log("[Intermediate] Setting cookie: " + event.data);
+	document.cookie = 'sender_message='+event.data+'; SameSite=None; Secure; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/'
 });
-
-
-window.addEventListener('storage', function onStorageEvent(storageEvent) {
-	console.log('storage event');
-	console.log(JSON.stringify(localStorage));
-	var win = window.parent[0];
 	
-	if(win && win.name === 'frame2') {
-		top.postMessage(storageEvent.newValue, "*"); //Works locally
-		window.parent.postMessage(storageEvent.newValue, "*"); //works in PEGA
-	}
-}, false);
+//Check for any changes in the Cookies and uses postMessage to send it to the receiver
+window.onload = function() {
+	var last_cookie = "";
+	var intervalId = window.setInterval(function(){
+	  	var new_cookie = document.cookie.replace("sender_message=","");
+		if(last_cookie !== new_cookie) {
+			console.log("[Intermediate] Found new Cookie, sending it trough postMessage: " + new_cookie);
+			document.getElementById('cookie_result').value = new_cookie;
+			console.log(cookie);
 
-function readCookies() {
-	var cookie = document.cookie;
-    	console.log("Reading cookies");
-	document.getElementById('cookie_result').value = cookie;
-	console.log(cookie);
-	
-	var win = window.parent[0];
-	if(win && win.name === 'frame2') {
-		top.postMessage(cookie, "*"); //Works locally
-		window.parent.postMessage(cookie, "*"); //works in PEGA
-	}
-}
+			var win = window.parent[0];
+			if(win && win.name === 'frame2') {
+				top.postMessage(new_cookie, "*"); //Works locally
+				window.parent.postMessage(new_cookie, "*"); //works in PEGA
+			}
+		}
+
+	}, 100);
+
+};
 </script>
 
 <p>Iframe</p>
 <input id="cookie_result" size="100"></input>
-<input type="button" value="Read cookies" onclick="readCookies()">
