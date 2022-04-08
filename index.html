@@ -13,8 +13,6 @@ window.onload = function() {
 		if(last_cookie !== new_cookie) {
 			console.log("[Intermediate] Found new Cookie, sending it trough postMessage: " + new_cookie);
 			document.getElementById('cookie_result').value = new_cookie;
-			console.log(cookie);
-
 			var win = window.parent[0];
 			if(win && win.name === 'frame2') {
 				top.postMessage(new_cookie, "*"); //Works locally
