@@ -3,7 +3,9 @@
 //Receives data from Sender and saves it in a Cookie
 window.addEventListener("message", function(event){
 	console.log("[Intermediate] Setting cookie: " + event.data);
-	document.cookie = 'sender_message='+event.data+'; SameSite=None; Secure; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/'
+	document.cookie = 'sender_message='+event.data+'; SameSite=None; Secure; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/';
+	var node = document.createElement("shared-cookie");
+	node.value = "Testing shared cookie";
 });
 
 //This runs in Receiver IFrame 
