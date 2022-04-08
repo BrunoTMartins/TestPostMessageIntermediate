@@ -20,10 +20,16 @@ window.addEventListener('storage', function onStorageEvent(storageEvent) {
 }, false);
 
 function readCookies() {
+	var cookie = document.cookie;
     	console.log("Reading cookies");
-	var cookie_result = document.getElementById('cookie_result');
-	cookie_result.value=document.cookie;
-	console.log(document.cookie);
+	document.getElementById('cookie_result').value = cookie;
+	console.log(cookie);
+	
+	var win = window.parent[0];
+	if(win && win.name === 'frame2') {
+		top.postMessage(cookie, "*"); //Works locally
+		window.parent.postMessage(cookie, "*"); //works in PEGA
+	}
 }
 </script>
 
