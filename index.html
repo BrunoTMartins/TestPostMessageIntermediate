@@ -1,10 +1,12 @@
 <script>
+//This runs in Sender IFrame
 //Receives data from Sender and saves it in a Cookie
 window.addEventListener("message", function(event){
 	console.log("[Intermediate] Setting cookie: " + event.data);
 	document.cookie = 'sender_message='+event.data+'; SameSite=None; Secure; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/'
 });
-	
+
+//This runs in Receiver IFrame 
 //Check for any changes in the Cookies and uses postMessage to send it to the receiver
 window.onload = function() {
 	var last_cookie = "";
@@ -21,7 +23,6 @@ window.onload = function() {
 		}
 
 	}, 100);
-
 };
 </script>
 
