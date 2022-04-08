@@ -22,8 +22,8 @@ window.addEventListener('storage', function onStorageEvent(storageEvent) {
 function readCookies() {
     	console.log("Reading cookies");
 	var cookie_result = document.getElementById('cookie_result');
-	cookie_result.value=document.getElementById("frame2").contentDocument.cookie;
-	console.log(document.getElementById("frame2").contentDocument.cookie);
+	cookie_result.value=document.cookie;
+	console.log(document.cookie);
 }
 </script>
 
