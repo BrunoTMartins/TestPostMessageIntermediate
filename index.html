@@ -9,19 +9,24 @@ window.addEventListener("message", function(event){
 //This runs in Receiver IFrame 
 //Check for any changes in the Cookies and uses postMessage to send it to the receiver
 window.onload = function() {
+	var key = "sender_message=";
 	var last_cookie = "";
 	var intervalId = window.setInterval(function(){
-	  	var new_cookie = document.cookie.replace("sender_message=","");
-		if(last_cookie !== new_cookie) {
-			last_cookie = new_cookie;
-			console.log("[Intermediate] Found new Cookie, sending it trough postMessage: " + new_cookie);
-			var win = window.parent[0];
-			if(win && win.name === 'frame2') {
-				top.postMessage(new_cookie, "*"); //Works locally
-				window.parent.postMessage(new_cookie, "*"); //works in PEGA
+		var cookies = document.cookie.split(';');
+		cookies.forEach(c => {
+			if(c.startsWith(key)) {
+				var new_cookie = c.replace(key,"");
+				if(last_cookie !== new_cookie) {
+					last_cookie = new_cookie;
+					console.log("[Intermediate] Found new Cookie, sending it trough postMessage: " + new_cookie);
+					var win = window.parent[0];
+					if(win && win.name === 'frame2') {
+						top.postMessage(new_cookie, "*"); //Works locally
+						window.parent.postMessage(new_cookie, "*"); //works in PEGA
+					}
+				}
 			}
-		}
-
+		});
 	}, 100);
 };
 </script>
