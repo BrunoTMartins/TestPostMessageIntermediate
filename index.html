@@ -20,9 +20,13 @@ window.addEventListener('storage', function onStorageEvent(storageEvent) {
 }, false);
 
 function readCookies() {
-	alert(document.getElementById("frame2").contentDocument.cookie);
+    	console.log("Reading cookies");
+	var cookie_result = document.getElementById('cookie_result');
+	cookie_result.value=document.getElementById("frame2").contentDocument.cookie;
+	console.log(document.getElementById("frame2").contentDocument.cookie);
 }
 </script>
 
 <p>Iframe</p>
+<input id="cookie_result" size="100"></input>
 <input type="button" value="Read cookies" onclick="readCookies()">
