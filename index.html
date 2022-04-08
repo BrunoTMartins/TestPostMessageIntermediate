@@ -13,8 +13,8 @@ window.onload = function() {
 	var intervalId = window.setInterval(function(){
 	  	var new_cookie = document.cookie.replace("sender_message=","");
 		if(last_cookie !== new_cookie) {
+			last_cookie = new_cookie;
 			console.log("[Intermediate] Found new Cookie, sending it trough postMessage: " + new_cookie);
-			document.getElementById('cookie_result').value = new_cookie;
 			var win = window.parent[0];
 			if(win && win.name === 'frame2') {
 				top.postMessage(new_cookie, "*"); //Works locally
@@ -27,4 +27,3 @@ window.onload = function() {
 </script>
 
 <p>Iframe</p>
-<input id="cookie_result" size="100"></input>
