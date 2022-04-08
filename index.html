@@ -14,7 +14,8 @@ window.onload = function() {
 	var intervalId = window.setInterval(function(){
 		var cookies = document.cookie.split(';');
 		cookies.forEach(c => {
-			if(c.startsWith(key)) {
+			//trimStart because depending on Cookie position in array it may contain a space at the start
+			if(c.trimStart().startsWith(key)) {
 				var new_cookie = c.replace(key,"");
 				if(last_cookie !== new_cookie) {
 					last_cookie = new_cookie;
