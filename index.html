@@ -1,3 +1,4 @@
+<p>Iframe</p>
 <script>
 	//This runs in Sender IFrame
 	//Receives data from Sender and saves it in a Cookie
@@ -21,7 +22,6 @@
 		localStorageParams = JSON.stringify(localStorageParams);
 		console.log("setting in local storage: ", localStorageParams);
 		localStorage.setItem('data', localStorageParams);
-		window.close();
 		//string.startsWith doesn't exist in IE
 		// if (!String.prototype.startsWith) {
 		// 	Object.defineProperty(String.prototype, 'startsWith', {
@@ -53,5 +53,3 @@
 		// }, 100);
 	};
 </script>
-
-<p>Iframe</p>
