@@ -1,49 +1,55 @@
 <script>
-//This runs in Sender IFrame
-//Receives data from Sender and saves it in a Cookie
-window.addEventListener("message", function(event){
-	console.log("[Intermediate] Setting cookie: " + event.data);
-	document.cookie = 'sender_message='+event.data+'; SameSite=None; Secure; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/';
-	var node = document.createElement("shared-cookie");
-	node.value = "Testing shared cookie";
-});
+	//This runs in Sender IFrame
+	//Receives data from Sender and saves it in a Cookie
+	// window.addEventListener("message", function(event){
+	// 	console.log("[Intermediate] Setting cookie: " + event.data);
+	// 	document.cookie = 'sender_message='+event.data+'; SameSite=None; Secure; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/';
+	// 	var node = document.createElement("shared-cookie");
+	// 	node.value = "Testing shared cookie";
+	// });
 
-//This runs in Receiver IFrame 
-//Check for any changes in the Cookies and uses postMessage to send it to the receiver
-window.onload = function() {
-	var key = "sender_message=";
-	var last_cookie = "";
-	
-	//string.startsWith doesn't exist in IE
-	if (!String.prototype.startsWith) {
-	    Object.defineProperty(String.prototype, 'startsWith', {
-		value: function(search, rawPos) {
-		    var pos = rawPos > 0 ? rawPos|0 : 0;
-		    return this.substring(pos, pos + search.length) === search;
+	//This runs in Receiver IFrame 
+	//Check for any changes in the Cookies and uses postMessage to send it to the receiver
+	window.onload = function () {
+		// var key = "sender_message=";
+		// var last_cookie = "";
+		var queryStringparams = new URLSearchParams(window.location.search)
+		var localStorageParams = {};
+		for (const param of queryStringparams) {
+			localStorageParams[param[0]] = param[1];
 		}
-	    });
-	}
-	
-	var intervalId = window.setInterval(function(){
-		var cookies = document.cookie.split(';');
-		//Using for loop since forEach doesn't compile in IE
-		for(var i = 0; i < cookies.length; i++) {
-			//trimStart because depending on Cookie position in array it may contain a space at the start
-			if(cookies[i].startsWith(key)) {
-				var new_cookie = cookies[i].replace(key,"");
-				if(last_cookie !== new_cookie) {
-					last_cookie = new_cookie;
-					console.log("[Intermediate] Found new Cookie, sending it trough postMessage: " + new_cookie);
-					var win = window.parent[0];
-					if(win && win.name === 'frame2') {
-						top.postMessage(new_cookie, "*"); //Works locally
-						window.parent.postMessage(new_cookie, "*"); //works in PEGA
-					}
-				}
-			}	
-		}
-	}, 100);
-};
+		localStorageParams = JSON.stringify(localStorageParams);
+		localStorage.setItem('data', localStorageParams);
+		//string.startsWith doesn't exist in IE
+		// if (!String.prototype.startsWith) {
+		// 	Object.defineProperty(String.prototype, 'startsWith', {
+		// 		value: function (search, rawPos) {
+		// 			var pos = rawPos > 0 ? rawPos | 0 : 0;
+		// 			return this.substring(pos, pos + search.length) === search;
+		// 		}
+		// 	});
+		// }
+
+		// var intervalId = window.setInterval(function () {
+		// 	var cookies = document.cookie.split(';');
+		// 	//Using for loop since forEach doesn't compile in IE
+		// 	for (var i = 0; i < cookies.length; i++) {
+		// 		//trimStart because depending on Cookie position in array it may contain a space at the start
+		// 		if (cookies[i].startsWith(key)) {
+		// 			var new_cookie = cookies[i].replace(key, "");
+		// 			if (last_cookie !== new_cookie) {
+		// 				last_cookie = new_cookie;
+		// 				console.log("[Intermediate] Found new Cookie, sending it trough postMessage: " + new_cookie);
+		// 				var win = window.parent[0];
+		// 				if (win && win.name === 'frame2') {
+		// 					top.postMessage(new_cookie, "*"); //Works locally
+		// 					window.parent.postMessage(new_cookie, "*"); //works in PEGA
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }, 100);
+	};
 </script>
 
 <p>Iframe</p>
