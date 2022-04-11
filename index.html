@@ -19,7 +19,9 @@
 			localStorageParams[param[0]] = param[1];
 		}
 		localStorageParams = JSON.stringify(localStorageParams);
+		console.log("setting in local storage: ", localStorageParams);
 		localStorage.setItem('data', localStorageParams);
+		window.close();
 		//string.startsWith doesn't exist in IE
 		// if (!String.prototype.startsWith) {
 		// 	Object.defineProperty(String.prototype, 'startsWith', {
